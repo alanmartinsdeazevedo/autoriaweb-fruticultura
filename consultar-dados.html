@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultar Dados</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a class="navbar-brand" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 28 24" width="28" height="24" fill="none">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24" fill="#5d5d5b" x="2" y="0" opacity="100%">
+            <path d="M64 95.1H0c0 123.8 100.3 224 224 224v128C224 465.6 238.4 480 255.1 480S288 465.6 288 448V320C288 196.3 187.7 95.1 64 95.1zM448 32c-84.25 0-157.4 46.5-195.8 115.3c27.75 30.12 48.25 66.88 59 107.5C424 243.1 512 147.9 512 32H448z"></path>
+          </svg>
+        </svg>
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li class="nav-item"><a class="nav-link px-2" href="projetos.html">Projetos</a></li>
+        <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+      </ul>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-warning" onclick="logout()">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-5">
+    <h2>Dados Registrados</h2>
+    <div id="dadosTable" class="mt-3">
+      <!-- Tabela de dados -->
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <!-- JS próprio -->
+    <script src="/assets/js/scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    // Procurar ID do projeto na URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var projectId = urlParams.get('id');
+
+    var dados = JSON.parse(localStorage.getItem("dados")) || [];
+
+    // Filtrar dados pelo ID do projeto
+    var dadosDoProjeto = dados.filter(function (item) {
+        return item.id === projectId;
+    });
+
+    var dadosTableElement = document.getElementById('dadosTable');
+
+    if (dadosDoProjeto.length > 0) {
+        var table = document.createElement('table');
+        table.className = 'table table-custom';
+        table.innerHTML = `
+        <thead>
+            <tr>
+            <th scope="col">Temperatura</th>
+            <th scope="col">Crescimento</th>
+            <th scope="col">Umidade</th>
+            <th scope="col">Pragas/Doenças</th>
+            <th scope="col">Produção</th>
+            <th scope="col">Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${dadosDoProjeto.map(function (item) {
+            return `
+                <tr>
+                <td>${item.temperatura}</td>
+                <td>${item.crescimento}</td>
+                <td>${item.umidade}</td>
+                <td>${item.pragas}</td>
+                <td>${item.producao}</td>
+                <td>${item.data}</td>
+                </tr>
+            `;
+            }).join('')}
+        </tbody>
+        `;
+
+        dadosTableElement.appendChild(table);
+    } else {
+        dadosTableElement.innerHTML = '<p>Nenhum dado registrado para este projeto.</p>';
+    }
+    });
+    </script>
+</body>
+</html>
